@@ -6,6 +6,7 @@ namespace Messenger.Application.DTOs.ChatDTOs
         public Guid Id { get; set; }
         public bool IsGroup { get; set; }
         public List<UserDTO> Participants { get; set; } = new();
+        public MessageDTO? LastMessage { get; set; }
     }
 }
 
