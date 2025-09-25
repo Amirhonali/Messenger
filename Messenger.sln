@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messenger.Api", "Messenger.Api\Messenger.Api.csproj", "{D03DCE7F-E217-4210-B6C4-D634BEB7726B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messenger.Domain", "Messenger.Domain\Messenger.Domain.csproj", "{07371A04-F6B4-4058-AB94-0CBE76346AF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messenger.Infrastructure", "Messenger.Infrastructure\Messenger.Infrastructure.csproj", "{F98A07A3-DDD6-41CC-9323-2EDFFA122A45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messenger.Application", "Messenger.Application\Messenger.Application.csproj", "{7627D202-BF2F-4C22-B5B7-12BFC28B68E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messenger.Shared", "Messenger.Shared\Messenger.Shared.csproj", "{D436843F-1F27-4A0D-B857-8FCCA3F80E0E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D3893C0D-19E6-4580-8CA5-97EDA9FAFC0B}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D03DCE7F-E217-4210-B6C4-D634BEB7726B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D03DCE7F-E217-4210-B6C4-D634BEB7726B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D03DCE7F-E217-4210-B6C4-D634BEB7726B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D03DCE7F-E217-4210-B6C4-D634BEB7726B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07371A04-F6B4-4058-AB94-0CBE76346AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07371A04-F6B4-4058-AB94-0CBE76346AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07371A04-F6B4-4058-AB94-0CBE76346AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07371A04-F6B4-4058-AB94-0CBE76346AF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F98A07A3-DDD6-41CC-9323-2EDFFA122A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F98A07A3-DDD6-41CC-9323-2EDFFA122A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F98A07A3-DDD6-41CC-9323-2EDFFA122A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F98A07A3-DDD6-41CC-9323-2EDFFA122A45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7627D202-BF2F-4C22-B5B7-12BFC28B68E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7627D202-BF2F-4C22-B5B7-12BFC28B68E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7627D202-BF2F-4C22-B5B7-12BFC28B68E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7627D202-BF2F-4C22-B5B7-12BFC28B68E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D436843F-1F27-4A0D-B857-8FCCA3F80E0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D436843F-1F27-4A0D-B857-8FCCA3F80E0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D436843F-1F27-4A0D-B857-8FCCA3F80E0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D436843F-1F27-4A0D-B857-8FCCA3F80E0E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {400E606C-C7E3-443F-9D27-3EAD4A9EA45A}
+	EndGlobalSection
+EndGlobal

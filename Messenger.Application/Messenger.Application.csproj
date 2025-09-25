@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DTOs\" />
+    <None Remove="DTOs\User\" />
+    <None Remove="Interfaces\" />
+    <None Remove="Services\" />
+    <None Remove="DTOs\ChatDTOs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+    <Folder Include="DTOs\User\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+    <Folder Include="DTOs\ChatDTOs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Messenger.Domain\Messenger.Domain.csproj" />
+    <ProjectReference Include="..\Messenger.Infrastructure\Messenger.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+  </ItemGroup>
+</Project>
