@@ -12,6 +12,8 @@
     <None Remove="Interfaces\" />
     <None Remove="Services\" />
     <None Remove="DTOs\ChatDTOs\" />
+    <None Remove="Hubs\" />
+    <None Remove="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTOs\" />
@@ -19,6 +21,8 @@
     <Folder Include="Interfaces\" />
     <Folder Include="Services\" />
     <Folder Include="DTOs\ChatDTOs\" />
+    <Folder Include="Hubs\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Messenger.Domain\Messenger.Domain.csproj" />

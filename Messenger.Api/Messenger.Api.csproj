@@ -10,6 +10,8 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.20" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.20">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -27,8 +29,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controllers\" />
+    <None Remove="Middlewares\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Middlewares\" />
   </ItemGroup>
 </Project>

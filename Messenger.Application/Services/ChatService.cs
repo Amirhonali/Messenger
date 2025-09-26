@@ -1,36 +1,37 @@
 ﻿using Messenger.Application.DTOs.ChatDTOs;
+using Messenger.Application.Hubs;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Exceptions;
 using Messenger.Domain.Entities;
 using Messenger.Infrastructure;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 public class ChatService : IChatService
 {
     private readonly AppDbContext _context;
+    private readonly IHubContext<ChatHub> _hubContext;
 
-    public ChatService(AppDbContext context)
+    public ChatService(AppDbContext context, IHubContext<ChatHub> hubContext)
     {
         _context = context;
+        _hubContext = hubContext;
     }
 
     public async Task<ChatDTO> CreateChatAsync(List<Guid> participantIds, bool isGroup)
     {
-        // Проверка существования пользователей
         var users = await _context.Users
             .Where(u => participantIds.Contains(u.Id))
             .ToListAsync();
 
         if (users.Count != participantIds.Count)
-            throw new Exception("Один или несколько пользователей не существуют");
+            throw new ValidationException("Один или несколько пользователей не существуют"); // 👈 кастомная ошибка
 
         var chat = new Chat
         {
             Id = Guid.NewGuid(),
             IsGroup = isGroup,
-            Participants = users.Select(u => new ChatParticipant
-            {
-                UserId = u.Id
-            }).ToList()
+            Participants = users.Select(u => new ChatParticipant { UserId = u.Id }).ToList()
         };
 
         _context.Chats.Add(chat);
@@ -52,14 +53,14 @@ public class ChatService : IChatService
     {
         var chat = await _context.Chats
             .Include(c => c.Participants)
-            .ThenInclude(p => p.User)
             .FirstOrDefaultAsync(c => c.Id == chatId);
 
         if (chat == null)
-            throw new Exception("Чат не найден");
+            throw new NotFoundException("Chat not found"); // 👈
 
-        if (!chat.Participants.Any(p => p.UserId == senderId))
-            throw new Exception("Пользователь не участвует в чате");
+        var sender = await _context.Users.FindAsync(senderId);
+        if (sender == null)
+            throw new NotFoundException("Sender not found"); // 👈
 
         var message = new Message
         {
@@ -73,16 +74,19 @@ public class ChatService : IChatService
         _context.Messages.Add(message);
         await _context.SaveChangesAsync();
 
-        var sender = chat.Participants.First(p => p.UserId == senderId).User;
-
-        return new MessageDTO
+        var messageDto = new MessageDTO
         {
             Id = message.Id,
-            SenderId = senderId,
+            SenderId = message.SenderId,
             SenderUserName = sender.Username,
             Text = message.Text,
             SentAt = message.SentAt
         };
+
+        await _hubContext.Clients.Group(chatId.ToString())
+            .SendAsync("ReceiveMessage", messageDto);
+
+        return messageDto;
     }
 
     public async Task<List<MessageDTO>> GetMessagesAsync(Guid chatId)
@@ -90,7 +94,7 @@ public class ChatService : IChatService
         var messages = await _context.Messages
             .Include(m => m.Sender)
             .Where(m => m.ChatId == chatId)
-        .OrderBy(m => m.SentAt)
+            .OrderBy(m => m.SentAt)
             .ToListAsync();
 
         return messages.Select(m => new MessageDTO
@@ -116,7 +120,11 @@ public class ChatService : IChatService
         {
             Id = c.Id,
             IsGroup = c.IsGroup,
-            Participants = c.Participants.Select(p => new UserDTO { Id = p.User.Id, Username = p.User.Username }).ToList(),
+            Participants = c.Participants.Select(p => new UserDTO
+            {
+                Id = p.User.Id,
+                Username = p.User.Username
+            }).ToList(),
             LastMessage = c.Messages.Select(m => new MessageDTO
             {
                 Id = m.Id,
@@ -131,23 +139,29 @@ public class ChatService : IChatService
     public async Task DeleteMessageAsync(Guid messageId, Guid userId)
     {
         var message = await _context.Messages.FindAsync(messageId);
-        if (message == null) throw new Exception("Message not found");
-        if (message.SenderId != userId) throw new Exception("Not authorized");
+        if (message == null) throw new NotFoundException("Message not found");
+        if (message.SenderId != userId) throw new ForbiddenException("You cannot delete someone else's message");
 
         _context.Messages.Remove(message);
         await _context.SaveChangesAsync();
+
+        await _hubContext.Clients.Group(message.ChatId.ToString())
+            .SendAsync("MessageDeleted", message.Id);
     }
 
     public async Task<MessageDTO> EditMessageAsync(Guid messageId, Guid userId, string newText)
     {
-        var message = await _context.Messages.FindAsync(messageId);
-        if (message == null) throw new Exception("Message not found");
-        if (message.SenderId != userId) throw new Exception("Not authorized");
+        var message = await _context.Messages
+            .Include(m => m.Sender)
+            .FirstOrDefaultAsync(m => m.Id == messageId);
+
+        if (message == null) throw new NotFoundException("Message not found");
+        if (message.SenderId != userId) throw new ForbiddenException("You cannot edit someone else's message");
 
         message.Text = newText;
         await _context.SaveChangesAsync();
 
-        return new MessageDTO
+        var dto = new MessageDTO
         {
             Id = message.Id,
             SenderId = message.SenderId,
@@ -155,5 +169,13 @@ public class ChatService : IChatService
             Text = message.Text,
             SentAt = message.SentAt
         };
+
+        await _hubContext.Clients.Group(message.ChatId.ToString())
+            .SendAsync("MessageEdited", dto);
+
+        return dto;
     }
 }
+
+
+
